@@ -46,11 +46,7 @@ func main() {
 	flag.IntVar(&serverPort, "port", 8000, "The port to run the server on")
 	flag.Parse()
 
-	// Add ads the function thats going to handle that response
 	http.HandleFunc("/", hello)
 
-	// Starts the web server
-	// The first argument in this method is the port you want your server to run on
-	// The second is a handler. However we have already added this in the line above so we just pass in nil
 	http.ListenAndServe(fmt.Sprintf(":%v", serverPort), nil)
 }
