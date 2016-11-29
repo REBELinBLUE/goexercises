@@ -7,25 +7,43 @@ import (
 
 func main() {
 	fmt.Println("Developers working on the 5th Floor\n--------")
-	for name, details := range People {
-		if details.floor == 5 && strings.ToLower(details.dept) == "development" {
-			fmt.Println(name)
-		}
-	}
+	fmt.Println(peopleOnFloorFive())
 
 	fmt.Println("\nPeople managed by Charlie\n--------")
-	for name, details := range People {
-		if strings.ToLower(details.manager) == "charlie" {
-			fmt.Println(name)
-		}
-	}
+	fmt.Println(charliesTeam())
 
 	fmt.Println("\nPeople working in Product\n--------")
+	fmt.Println(peopleWorkingInProduct())
+}
+
+func peopleOnFloorFive() []string {
+	fifthfloor := make([]string, 0)
 	for name, details := range People {
-		if strings.ToLower(details.dept) == "product" {
-			fmt.Println(name)
+		if details.floor == 5 && strings.ToLower(details.dept) == "development" {
+			fifthfloor = append(fifthfloor, name)
 		}
 	}
+	return fifthfloor
+}
+
+func charliesTeam() []string {
+	charliesteam := make([]string, 0)
+	for name, details := range People {
+		if strings.ToLower(details.manager) == "charlie" {
+			charliesteam = append(charliesteam, name)
+		}
+	}
+	return charliesteam
+}
+
+func peopleWorkingInProduct() []string {
+	productowners := make([]string, 0)
+	for name, details := range People {
+		if strings.ToLower(details.dept) == "product" {
+			productowners = append(productowners, name)
+		}
+	}
+	return productowners
 }
 
 type details struct {
