@@ -1,52 +1,38 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
-	"log"
 	"net/http"
+
+	"github.com/REBELinBLUE/goexercises/webservice/developers"
+	"github.com/REBELinBLUE/goexercises/webservice/response"
+	"github.com/julienschmidt/httprouter"
 )
-
-type Response struct {
-	Code   int    `json:"code"`
-	Result string `json:"result"`
-}
-
-func hello(w http.ResponseWriter, r *http.Request) {
-
-	name := r.FormValue("name")
-
-	if len(name) < 2 {
-		sendResponse(http.StatusBadRequest, "The name parameter must be at least 2 characters long", w)
-	} else {
-		body := fmt.Sprintf("hello %s", r.FormValue("name"))
-
-		sendResponse(http.StatusOK, body, w)
-	}
-}
-
-func sendResponse(statusCode int, responseBody string, w http.ResponseWriter) {
-	res := Response{
-		Code:   statusCode,
-		Result: responseBody,
-	}
-
-	json, err := json.Marshal(res)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(json)
-}
 
 func main() {
 	var serverPort int
 	flag.IntVar(&serverPort, "port", 8000, "The port to run the server on")
 	flag.Parse()
 
-	http.HandleFunc("/", hello)
+	router := httprouter.New()
 
-	http.ListenAndServe(fmt.Sprintf(":%v", serverPort), nil)
+	router.GET("/", hello)
+	router.POST("/developers", developers.AddDeveloper)
+	router.GET("/developers", developers.ShowDevelopers)
+	router.GET("/developers/:developer", developers.ShowDeveloper)
+
+	http.ListenAndServe(fmt.Sprintf(":%v", serverPort), router)
+}
+
+func hello(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	name := r.FormValue("name")
+
+	if len(name) < 2 {
+		response.Send(http.StatusBadRequest, "The name parameter must be at least 2 characters long", w)
+	} else {
+		body := fmt.Sprintf("hello %s", r.FormValue("name"))
+
+		response.Send(http.StatusOK, body, w)
+	}
 }
