@@ -43,7 +43,7 @@ func main() {
 		ca.Set(animal, count)
 
 		for c := 0; c < 10; c++ {
-			go func(cache *Cache, animal string) {
+			go func(cache *Cache, animal string, count int) {
 				s := rand.NewSource(time.Now().UnixNano())
 				r := rand.New(s)
 				num := r.Intn(1000)
@@ -52,8 +52,8 @@ func main() {
 
 				//cache.Animals[animal] = num
 
-				fmt.Printf("%v set to %d\n", animal, num)
-			}(ca, animal)
+				fmt.Printf("%v %v set to %d\n", count, animal, num)
+			}(ca, animal, c)
 		}
 	}
 
