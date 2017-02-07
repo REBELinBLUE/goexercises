@@ -30,6 +30,6 @@ func main() {
 		fmt.Printf("%+v", err)
 	}
 	resp, err := cli.Do(req)
-	fmt.Printf("%+v", req)
+	fmt.Printf("\n%+v\n\n", req)
 	fmt.Printf("%+v", resp)
 }
